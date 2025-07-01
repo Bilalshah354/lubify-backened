@@ -1,16 +1,23 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Role = require('../models/Role');
-
+const Shop = require('../models/Shop');
+const { KEYS } = require('../config/keys');
 module.exports = (requiredPermissions = []) => {
     return async (req, res, next) => {
         const token = req.header('x-auth-token');
         if (!token) return res.status(401).send('Access denied. No token provided.');
 
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded;
-
+            if(req?.header?.is_sf){
+                const shopData = await Shop.findOne({shop: KEYS?.LUBIFY_SHOPIFY_DOMAIN});
+                const decoded = jwt.verify(token, shopData?.salt);
+                req.user = decoded;    
+            }
+            else{
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                req.user = decoded;
+            }
             // Fetch user with roles
             const user = await User.findById(req.user.id).populate('roles');
 
