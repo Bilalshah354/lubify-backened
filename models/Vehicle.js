@@ -8,6 +8,7 @@ const VehicleSchema = new mongoose.Schema({
     model: { type: String, required: true },
     modelYear: { type: Number, required: true },
     color: { type: String, required: true },
+    variant: { type: String, required: true },
     image: { type: String, required: false }
 });
 

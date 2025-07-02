@@ -2,6 +2,9 @@ const Vehicle = require('../models/Vehicle');
 
 exports.addVehicle = async (vehicleData) => {
     try {
+        if (!vehicleData.variant) {
+            throw new Error('Variant is required');
+        }
         const vehicle = new Vehicle(vehicleData);
         await vehicle.save();
         return 'Vehicle added';
@@ -35,6 +38,9 @@ exports.addVehicle = async (vehicleData) => {
 
 exports.updateVehicle = async (id, data) => {
     try {
+        if (!data.variant) {
+            throw new Error('Variant is required');
+        }
         await Vehicle.findByIdAndUpdate(id, data, { runValidators: true, new: true });
         return 'Vehicle updated';
     } catch (error) {

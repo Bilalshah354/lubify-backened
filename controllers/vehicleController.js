@@ -2,6 +2,9 @@ const vehicleService = require('../services/vehicleService');
 
 exports.addVehicle = async (req, res) => {
     try {
+        if (!req.body.variant) {
+            return res.status(400).json({ error: 'Variant is required' });
+        }
         const result = await vehicleService.addVehicle(req.body);
         res.status(201).json(result);
     } catch (err) {
@@ -29,6 +32,9 @@ exports.addVehicle = async (req, res) => {
 
 exports.updateVehicle = async (req, res) => {
     try {
+        if (!req.body.variant) {
+            return res.status(400).json({ error: 'Variant is required' });
+        }
         const result = await vehicleService.updateVehicle(req.params.id, req.body);
         res.json(result);
     } catch (err) {
