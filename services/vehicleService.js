@@ -1,4 +1,5 @@
 const Vehicle = require('../models/Vehicle');
+const OilChange = require('../models/OilChange');
 
 exports.addVehicle = async (vehicleData) => {
     try {
@@ -69,7 +70,17 @@ exports.updateVehicle = async (id, data) => {
 exports.getUserVehicles = async (userId) => {
     const vehicles = await Vehicle.find({ userId });
     if (vehicles.length === 0) throw new Error('No vehicles found');
-    return vehicles;
+    // For each vehicle, fetch oil change history
+    const vehiclesWithOilChanges = await Promise.all(
+        vehicles.map(async (vehicle) => {
+            const oilChanges = await OilChange.find({ carId: vehicle._id });
+            return {
+                vehicle,
+                oilChanges
+            };
+        })
+    );
+    return vehiclesWithOilChanges;
 };
 
 exports.deleteVehicle = async (id) => {
