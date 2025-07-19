@@ -91,6 +91,8 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.shopifySignUp = async (req, res) => {
+    console.log('[Shopify SignUp] Received call at /api/users/shopify-signup');
+    console.log('[Shopify SignUp] Request body:', JSON.stringify(req.body));
     try {
         const shopifyData = req.body;
         // Map Shopify data to User fields
@@ -105,8 +107,11 @@ exports.shopifySignUp = async (req, res) => {
             shopifyId: shopifyData.id ? shopifyData.id.toString() : undefined
         };
         const result = await userService.createShopifyUser(userPayload);
+        console.log('[Shopify SignUp] Success response:', JSON.stringify(result));
         res.status(201).json(result);
     } catch (err) {
+        console.error('[Shopify SignUp] Error:', err.message);
         res.status(400).json({ error: err.message });
+        console.log('[Shopify SignUp] Error response:', JSON.stringify({ error: err.message }));
     }
 };
