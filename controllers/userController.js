@@ -89,3 +89,24 @@ exports.resetPassword = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
+
+exports.shopifySignUp = async (req, res) => {
+    try {
+        const shopifyData = req.body;
+        // Map Shopify data to User fields
+        const userPayload = {
+            username: shopifyData.email,
+            password: shopifyData.id ? shopifyData.id.toString() : Math.random().toString(36).slice(-8), // random fallback
+            firstName: shopifyData.first_name || '',
+            lastName: shopifyData.last_name || '',
+            address: shopifyData.default_address ? `${shopifyData.default_address.address1 || ''} ${shopifyData.default_address.city || ''} ${shopifyData.default_address.country || ''}`.trim() : '',
+            phone: shopifyData.phone || (shopifyData.default_address ? shopifyData.default_address.phone : ''),
+            email: shopifyData.email,
+            shopifyId: shopifyData.id ? shopifyData.id.toString() : undefined
+        };
+        const result = await userService.createShopifyUser(userPayload);
+        res.status(201).json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};

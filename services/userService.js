@@ -8,9 +8,9 @@ const generateToken = (userId) => {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
-exports.registerUser = async ({ username, password }) => {
+exports.registerUser = async ({ username, password, shopifyId, firebaseId }) => {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword });
+    const user = new User({ username, password: hashedPassword, shopifyId, firebaseId });
     await user.save();
     return 'User registered';
 };
@@ -49,6 +49,22 @@ exports.updateUser = async (id, data) => {
 exports.deleteUser = async (id) => {
     await User.findByIdAndDelete(id);
     return 'User deleted';
+};
+
+exports.createShopifyUser = async (userPayload) => {
+    // Check if user already exists by email or shopifyId
+    const existingUser = await User.findOne({ $or: [ { email: userPayload.email }, { shopifyId: userPayload.shopifyId } ] });
+    if (existingUser) {
+        throw new Error('User with this email or Shopify ID already exists');
+    }
+    // Hash the password (Shopify ID or fallback)
+    const hashedPassword = await bcrypt.hash(userPayload.password, 10);
+    const user = new User({
+        ...userPayload,
+        password: hashedPassword
+    });
+    await user.save();
+    return { message: 'Shopify user created', userId: user._id };
 };
 
 // Utility to configure nodemailer to send emails

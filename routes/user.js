@@ -16,4 +16,5 @@ router.post('/forget-password', userController.forgetPassword);
 
 // Reset password route
 router.post('/reset-password', userController.resetPassword);
+router.post('/shopify-signup', userController.shopifySignUp);
 module.exports = router;
