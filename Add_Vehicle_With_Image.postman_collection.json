@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "vehicle-add-with-image-001",
+		"name": "Vehicle APIs with Image",
+		"description": "API endpoints to create and update vehicles with image upload",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Vehicle with Image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": [],
+							"description": "Vehicle image file (jpg, png, etc. - max 5MB)"
+						},
+						{
+							"key": "userId",
+							"value": "507f1f77bcf86cd799439011",
+							"type": "text",
+							"description": "MongoDB ObjectId of the user"
+						},
+						{
+							"key": "engineNumber",
+							"value": "ENG123456789",
+							"type": "text",
+							"description": "Unique engine number"
+						},
+						{
+							"key": "vehicleName",
+							"value": "Toyota Camry",
+							"type": "text",
+							"description": "Name of the vehicle"
+						},
+						{
+							"key": "make",
+							"value": "Toyota",
+							"type": "text",
+							"description": "Vehicle manufacturer"
+						},
+						{
+							"key": "model",
+							"value": "Camry",
+							"type": "text",
+							"description": "Vehicle model"
+						},
+						{
+							"key": "modelYear",
+							"value": "2023",
+							"type": "text",
+							"description": "Year of the vehicle model"
+						},
+						{
+							"key": "color",
+							"value": "White",
+							"type": "text",
+							"description": "Vehicle color"
+						},
+						{
+							"key": "variant",
+							"value": "LE",
+							"type": "text",
+							"description": "Vehicle variant (required)"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/vehicles/add-with-image",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"vehicles",
+						"add-with-image"
+					]
+				},
+				"description": "Creates a new vehicle with image upload. The image will be saved locally and the URL will be saved in the database."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Vehicle with Image",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": [],
+							"description": "New vehicle image file (optional - only if updating image)"
+						},
+						{
+							"key": "userId",
+							"value": "507f1f77bcf86cd799439011",
+							"type": "text",
+							"description": "MongoDB ObjectId of the user"
+						},
+						{
+							"key": "engineNumber",
+							"value": "ENG123456789",
+							"type": "text",
+							"description": "Unique engine number"
+						},
+						{
+							"key": "vehicleName",
+							"value": "Toyota Camry Updated",
+							"type": "text",
+							"description": "Name of the vehicle"
+						},
+						{
+							"key": "make",
+							"value": "Toyota",
+							"type": "text",
+							"description": "Vehicle manufacturer"
+						},
+						{
+							"key": "model",
+							"value": "Camry",
+							"type": "text",
+							"description": "Vehicle model"
+						},
+						{
+							"key": "modelYear",
+							"value": "2024",
+							"type": "text",
+							"description": "Year of the vehicle model"
+						},
+						{
+							"key": "color",
+							"value": "Black",
+							"type": "text",
+							"description": "Vehicle color"
+						},
+						{
+							"key": "variant",
+							"value": "XLE",
+							"type": "text",
+							"description": "Vehicle variant (required)"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/vehicles/update-with-image/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"vehicles",
+						"update-with-image",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "VEHICLE_ID_HERE",
+							"description": "Vehicle MongoDB ObjectId"
+						}
+					]
+				},
+				"description": "Updates a vehicle. Image is optional - if provided, the old image will be deleted and replaced with the new one. If no image is provided, only other fields will be updated."
+			},
+			"response": []
+		}
+	]
+}

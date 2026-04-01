@@ -11,6 +11,7 @@ const roleRoutes = require('./routes/role');
 const reviewRoutes = require('./routes/review');
 const vehicleRoutes = require('./routes/vehicle');
 const oilChangeRoutes = require('./routes/oilChange');
+const sourceItRoutes = require('./routes/sourceIt');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/roles', roleRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/oilChanges', oilChangeRoutes);
+app.use('/api/source-it', sourceItRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
