@@ -3,7 +3,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const { sendMail } = require('../utils/mailer');
 const generateToken = (userId) => {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
@@ -67,15 +67,6 @@ exports.createShopifyUser = async (userPayload) => {
     return { message: 'Shopify user created', userId: user._id };
 };
 
-// Utility to configure nodemailer to send emails
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'your-email@gmail.com', // replace with your email
-        pass: 'your-email-password'   // replace with your password or app password
-    }
-});
-
 exports.forgetPassword = async (email) => {
     const user = await User.findOne({ email });
     if (!user) throw new Error('No account found with that email');
@@ -91,14 +82,12 @@ exports.forgetPassword = async (email) => {
 
     // Send email with token (reset URL)
     const resetUrl = `http://yourapp.com/reset-password/${token}`;
-    const mailOptions = {
+
+    await sendMail({
         to: user.email,
-        from: 'passwordreset@yourapp.com',
         subject: 'Password Change Request',
         text: `Please click on the following link to reset your password: ${resetUrl}`
-    };
-
-    transporter.sendMail(mailOptions);
+    });
 
     return 'Password reset email sent';
 };
